@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/registerFragment">
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.examen2ndoparcial.RegisterFragment"
+        android:label="Registro">
+        <action
+            android:id="@+id/toPermission"
+            app:destination="@id/permissionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="com.example.examen2ndoparcial.PermissionFragment"
+        android:label="Permisos">
+        <action
+            android:id="@+id/toCamera"
+            app:destination="@id/cameraFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.examen2ndoparcial.CameraFragment"
+        android:label="Cámara">
+        <action
+            android:id="@+id/toToken"
+            app:destination="@id/tokenFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tokenFragment"
+        android:name="com.example.examen2ndoparcial.TokenFragment"
+        android:label="Token">
+        <action
+            android:id="@+id/toSuccess"
+            app:destination="@id/successFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/successFragment"
+        android:name="com.example.examen2ndoparcial.SuccessFragment"
+        android:label="¡Éxito!" />
+</navigation>
