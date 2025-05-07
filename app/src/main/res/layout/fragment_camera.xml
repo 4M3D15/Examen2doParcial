@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="?attr/colorSurface">
+    android:background="#FFFFFF">
 
-    <!-- Preview de cámara redondeado -->
+    <!-- Vista de la cámara -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardPreview"
         android:layout_width="0dp"
@@ -27,15 +27,17 @@
             android:clipToOutline="true" />
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Miniatura de la foto tomada -->
+    <!-- Imagen capturada (preview inmediato) -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardCaptured"
-        android:layout_width="100dp"
-        android:layout_height="150dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
         app:layout_constraintTop_toBottomOf="@id/cardPreview"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="4:3"
         android:layout_marginTop="16dp">
 
         <ImageView
@@ -43,31 +45,82 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:contentDescription="Foto tomada" />
+            android:contentDescription="Foto tomada"
+            android:visibility="gone" />
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Botón flotante para disparar -->
+    <!-- Botón Capturar -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnShoot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="Capturar foto"
-        app:srcCompat="@drawable/ic_camera"
-        app:tint="?attr/colorOnPrimary"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/cardPreview"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/cardCaptured" />
+        android:src="@drawable/camera_vector"
+        app:backgroundTint="#FF0000"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/cardCaptured"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:translationZ="8dp"
+        android:elevation="8dp" />
 
-    <!-- Indicación de geolocalización -->
+    <!-- Botones de acción: Aceptar / Reintentar -->
+    <LinearLayout
+        android:id="@+id/actionButtons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/cardCaptured"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <!-- Botón Aceptar (primario) -->
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button"
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Aceptar"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:paddingVertical="12dp"
+            app:cornerRadius="24dp"
+            app:backgroundTint="?attr/colorPrimary" />
+
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="wrap_content" />
+
+        <!-- Botón Reintentar (outlined) -->
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:id="@+id/btnRetry"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Reintentar"
+            android:textAllCaps="false"
+            android:paddingVertical="12dp"
+            app:cornerRadius="24dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="?attr/colorPrimary" />
+
+    </LinearLayout>
+
+
+    <!-- Texto de ubicación -->
     <TextView
         android:id="@+id/tvLocationHint"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Activa tu ubicación para añadir coordenadas"
         android:textAppearance="?attr/textAppearanceBody2"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/cardCaptured"
+        app:layout_constraintTop_toBottomOf="@id/actionButtons"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp" />

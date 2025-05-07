@@ -14,7 +14,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -44,6 +44,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation ("com.google.android.material:material:1.8.0")
 
     // Fragment KTX (for viewModels, fragment extensions)
     implementation("androidx.fragment:fragment-ktx:1.5.5")

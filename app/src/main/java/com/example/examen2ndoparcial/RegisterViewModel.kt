@@ -1,3 +1,4 @@
+// RegisterViewModel.kt
 package com.example.examen2ndoparcial
 
 import androidx.lifecycle.LiveData
@@ -9,7 +10,6 @@ class RegisterViewModel : ViewModel() {
     val curpState: LiveData<Boolean> get() = _curpState
 
     fun validateCurp(curp: String) {
-        // Por ejemplo: validamos longitud 18
-        _curpState.value = (curp.length == 18)
+        _curpState.value = curp.length == 18 && curp.all { it.isLetterOrDigit() }
     }
 }

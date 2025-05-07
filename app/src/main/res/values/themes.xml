@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Examen2ndoparcial" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-
+        <!-- aquí puedes añadir tus colores si quieres -->
     </style>
-
 </resources>

@@ -7,44 +7,44 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.app.ActivityCompat
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 
 class PermissionFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_permission, container, false)
+    private lateinit var btnGrant: Button
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val btnGrant = view.findViewById<Button>(R.id.btnGrant)
-        btnGrant.setOnClickListener {
-            val perms = arrayOf(
-                Manifest.permission.CAMERA,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            // Si ya están concedidos, navega directamente
-            if (perms.all {
-                    ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
-                }) {
-                findNavController().navigate(R.id.toCamera)
-            } else {
-                // Pide permisos
-                ActivityCompat.requestPermissions(requireActivity(), perms, 100)
-            }
+    private val requestLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { results ->
+        if (results.values.all { it }) {
+            findNavController().navigate(R.id.toCamera)
         }
     }
 
-    // Tras la petición de permisos, si se conceden, navega a cámara
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 100 && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.fragment_permission, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        btnGrant = view.findViewById(R.id.btnGrant)
+        val perms = arrayOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+
+        if (perms.all {
+                ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
+            }) {
             findNavController().navigate(R.id.toCamera)
+        }
+
+        btnGrant.setOnClickListener {
+            requestLauncher.launch(perms)
         }
     }
 }

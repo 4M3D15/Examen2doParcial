@@ -1,3 +1,4 @@
+// RegisterFragment.kt
 package com.example.examen2ndoparcial
 
 import android.os.Bundle
@@ -35,13 +36,31 @@ class RegisterFragment : Fragment() {
         errorName = view.findViewById(R.id.errorName)
         errorCurp = view.findViewById(R.id.errorCurp)
 
-        // Forzar mayúsculas y limitar CURP a 18 caracteres
-        editCurp.filters = arrayOf<InputFilter>(LengthFilter(18), AllCaps())
+        val letterFilter = InputFilter { source, start, end, _, _, _ ->
+            val pattern = Regex("[A-Z ]")
+            val filtered = StringBuilder()
+            for (i in start until end) {
+                val c = source[i]
+                if (pattern.matches(c.toString())) filtered.append(c)
+            }
+            filtered.toString()
+        }
+        editName.filters = arrayOf(AllCaps(), letterFilter)
 
-        // Validaciones en vivo
+        val alphaNumFilter = InputFilter { source, start, end, _, _, _ ->
+            val pattern = Regex("[A-Z0-9]")
+            val filtered = StringBuilder()
+            for (i in start until end) {
+                val c = source[i]
+                if (pattern.matches(c.toString())) filtered.append(c)
+            }
+            filtered.toString()
+        }
+        editCurp.filters = arrayOf(LengthFilter(18), AllCaps(), alphaNumFilter)
+
         editName.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrBlank() || text.any { it.isDigit() }) {
-                errorName.text = "Nombre inválido (no debe tener números)"
+            if (text.isNullOrBlank() || !text.all { it.isLetter() || it.isWhitespace() }) {
+                errorName.text = "Nombre inválido"
                 errorName.visibility = View.VISIBLE
             } else {
                 errorName.visibility = View.GONE
@@ -50,8 +69,8 @@ class RegisterFragment : Fragment() {
         }
 
         editCurp.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrBlank() || text.length < 18) {
-                errorCurp.text = "CURP incompleto"
+            if (text.isNullOrBlank() || text.length < 18 || !text.all { it.isLetterOrDigit() }) {
+                errorCurp.text = "CURP inválido"
                 errorCurp.visibility = View.VISIBLE
             } else {
                 errorCurp.visibility = View.GONE
@@ -74,8 +93,8 @@ class RegisterFragment : Fragment() {
     }
 
     private fun validateForm() {
-        val nameValid = editName.text?.isNotBlank() == true && !editName.text.toString().any { it.isDigit() }
-        val curpValid = editCurp.text?.length == 18
+        val nameValid = editName.text?.isNotBlank() == true && editName.text!!.all { it.isLetter() || it.isWhitespace() }
+        val curpValid = editCurp.text?.length == 18 && editCurp.text!!.all { it.isLetterOrDigit() }
         btnNext.isEnabled = nameValid && curpValid
     }
 }
